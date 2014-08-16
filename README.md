@@ -1,8 +1,10 @@
 raml-validation-proxy
 =====================
 
-Creates http proxy to record requests and then validates with raml specification.
-Generates json report.
+A lot of RESTful services using [RESTful API Modeling Language][8] to define their APIs.
+This service utilizes RESTful services test harness to verify if implementation follows API contract.
+
+It creates http proxy to record requests and then generates json report.
 
 It is built on [Vert.x][7] embedded server and Java 8.
 
@@ -76,3 +78,4 @@ Sample Report
   [5]: http://localhost:8080
   [6]: http://localhost:8081 
   [7]: http://vertx.io/embedding_manual.html
+  [8]: http://raml.org/
