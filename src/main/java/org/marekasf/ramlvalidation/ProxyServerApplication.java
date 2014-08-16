@@ -10,8 +10,6 @@ import org.vertx.java.platform.Verticle;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
-import sun.security.provider.certpath.Vertex;
-
 public class ProxyServerApplication extends Verticle
 {
 	private static volatile PlatformManager pm = null;
@@ -56,7 +54,8 @@ public class ProxyServerApplication extends Verticle
 	@Override
 	public void start()
 	{
-		this.getContainer().deployVerticle(RamlComparer.class.getCanonicalName(), container.config());
+		this.getContainer().deployVerticle(RamlReporter.class.getCanonicalName(), container.config());
+		this.getContainer().deployVerticle(RamlParser.class.getCanonicalName(), container.config());
 		this.getContainer().deployVerticle(Collector.class.getCanonicalName(), container.config());
 		this.getContainer().deployVerticle(ProxyServer.class.getCanonicalName(), container.config());
 	}

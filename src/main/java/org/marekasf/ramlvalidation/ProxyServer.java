@@ -30,11 +30,14 @@ public class ProxyServer extends Verticle
 			req.response().end("restarted");
 		});
 
-		rm.get("/vertex_proxy/proxy_report.json", req -> vertx.eventBus().send("proxy_report", true,
+		rm.get("/vertex_proxy/proxy_log.json", req -> vertx.eventBus().send("proxy_log", true,
+						(Message<JsonObject> event) -> req.response().end(event.body().encodePrettily())));
+
+		rm.get("/vertex_proxy/raml_log.json", req -> vertx.eventBus().send("raml_log", true,
 						(Message<JsonObject> event) -> req.response().end(event.body().encodePrettily())));
 
 		rm.get("/vertex_proxy/raml_report.json", req -> vertx.eventBus().send("raml_report", true,
-						(Message<JsonObject> event) -> req.response().end(event.body().encodePrettily())));
+				(Message<JsonObject> event) -> req.response().end(event.body().encodePrettily())));
 
 		rm.all(".*", req -> {
 			final HttpClientRequest cReq = client.request(req.method(), req.uri(), cRes -> {

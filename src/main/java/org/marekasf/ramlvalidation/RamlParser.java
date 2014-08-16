@@ -1,6 +1,7 @@
 package org.marekasf.ramlvalidation;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,46 +13,63 @@ import org.apache.commons.collections4.list.SetUniqueList;
 import org.raml.model.Raml;
 import org.raml.model.Resource;
 import org.raml.parser.visitor.RamlDocumentBuilder;
+import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.Message;
+import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 import org.vertx.java.platform.Verticle;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
-public class RamlComparer extends Verticle
+public class RamlParser extends Verticle
 {
 	// uri : method : attr : set<value>
 	private Map<String, Map<String, Map<String, SetUniqueList<String>>>> collector = new HashMap<>();
 
 	private String ramlResource;
 
+	private boolean ramlLoaded = false;
+
 	@Override
 	public void start()
 	{
-
 		vertx.eventBus().registerHandler("restart", this::restart);
-		vertx.eventBus().registerHandler("raml_report", this::report);
+		vertx.eventBus().registerHandler("raml_log", this::report);
+		vertx.eventBus().registerHandler("raml_resources", this::resourcesList);
 
 		ramlResource = getContainer().config().getString("raml.resource",
 				"http://localhost:8080/api-console/raml/api/document-repository-service.raml");
 
-		restart(null);
 	}
 
-	public Map restart(final Message<Boolean> e)
+	private void resourcesList(final Message<Boolean> message)
+	{
+		vertx.runOnContext(event -> {
+			loadRaml();
+			message.reply(new JsonArray(new LinkedList<>(collector.keySet())));
+		});
+	}
+
+	private void restart(final Message<Boolean> e)
 	{
 		collector.clear();
+		ramlLoaded = false;
+	}
 
-		final Raml raml = new RamlDocumentBuilder().build(ramlResource);
+	public Map loadRaml()
+	{
+		if (!ramlLoaded)
+		{
 
-		processResources(raml.getResources().values().stream());
+			final Raml raml = new RamlDocumentBuilder().build(ramlResource);
 
-		// raml.getTraits().forEach(es -> es.entrySet().forEach(t -> {
-		//	System.out.println(" > " + t.getKey() + " : " + t.getValue().getDisplayName() + " .. " + t.getValue());
-		// }));
+			processResources(raml.getResources().values().stream());
 
-		ImmutableSet.copyOf(collector.keySet()).stream().filter(k -> collector.get(k).isEmpty()).forEach(collector::remove);
+			ImmutableSet.copyOf(collector.keySet()).stream().filter(k -> collector.get(k).isEmpty()).forEach(collector::remove);
 
+			ramlLoaded = true;
+		}
 		return collector;
 	}
 
@@ -113,7 +131,10 @@ public class RamlComparer extends Verticle
 
 	private void report(final Message e)
 	{
-		e.reply(new JsonObject((Map) collector));
+		vertx.runOnContext(event -> {
+			loadRaml();
+			e.reply(new JsonObject((Map) collector));
+		});
 	}
 
 	public void setRamlResource(final String ramlResource)
