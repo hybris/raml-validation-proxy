@@ -4,7 +4,7 @@ raml-validation-proxy
 Creates http proxy to record requests and then validates with raml specification.
 Generates json report.
 
-It is built on the base of vert.x.
+It is built on [Vert.x][7] embedded server and Java 8.
 
 How to start
 -----------
@@ -17,7 +17,7 @@ mvn exec:java
 
 #### Running your tests
 
-By default proxy server listens on http://localhost:8081 and redirect calls to http://localhost:8080.
+By default proxy server listens on [http://localhost:8081][5] and redirect calls to [http://localhost:8080][6].
 Remember to set URL location to your RAML file (Check config section for details).
 
 #### Showing report
@@ -73,3 +73,6 @@ Sample Report
   [2]: http://localhost:8081/raml-validation-proxy/proxy_log.json
   [3]: http://localhost:8081/raml-validation-proxy/raml_log.json
   [4]: http://localhost:8081/raml-validation-proxy/restart
+  [5]: http://localhost:8080
+  [6]: http://localhost:8081 
+  [7]: http://vertx.io/embedding_manual.html
