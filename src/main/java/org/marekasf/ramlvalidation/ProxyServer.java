@@ -25,18 +25,18 @@ public class ProxyServer extends Verticle
 				config.getInteger("target.port", 8080));
 
 		RouteMatcher rm = new RouteMatcher();
-		rm.get("/vertex_proxy/restart", req -> {
+		rm.get("/raml-validation-proxy/restart", req -> {
 			vertx.eventBus().publish("restart", true);
 			req.response().end("restarted");
 		});
 
-		rm.get("/vertex_proxy/proxy_log.json", req -> vertx.eventBus().send("proxy_log", true,
+		rm.get("/raml-validation-proxy/proxy_log.json", req -> vertx.eventBus().send("proxy_log", true,
 						(Message<JsonObject> event) -> req.response().end(event.body().encodePrettily())));
 
-		rm.get("/vertex_proxy/raml_log.json", req -> vertx.eventBus().send("raml_log", true,
+		rm.get("/raml-validation-proxy/raml_log.json", req -> vertx.eventBus().send("raml_log", true,
 						(Message<JsonObject> event) -> req.response().end(event.body().encodePrettily())));
 
-		rm.get("/vertex_proxy/raml_report.json", req -> vertx.eventBus().send("raml_report", true,
+		rm.get("/raml-validation-proxy/raml_report.json", req -> vertx.eventBus().send("raml_report", true,
 				(Message<JsonObject> event) -> req.response().end(event.body().encodePrettily())));
 
 		rm.all(".*", req -> {

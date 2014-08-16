@@ -78,18 +78,59 @@ public class RamlReporter extends Verticle
 					return;
 				}
 
+				final JsonObject parameters = new JsonObject();
+
 				if ((nestedRaml != null && !(nestedRaml instanceof JsonObject)) || (nestedProxy != null && !(nestedProxy
 						instanceof JsonObject)))
 				{
-					// FIXME process values
+					processValues(parameters, (JsonArray) nestedRaml, (JsonArray) nestedProxy);
+				}
+				else
+				{
+					report(parameters, (JsonObject) nestedRaml, (JsonObject) nestedProxy);
+				}
+
+				if (parameters.size() > 0)
+				{
+					final JsonObject jsonObject = get(ret, key);
+					parameters.getFieldNames().forEach(k -> merge(jsonObject, k, parameters.getValue(k)));
+				}
+			}
+		});
+	}
+
+	private void merge(final JsonObject jsonObject, final String key, final Object value)
+	{
+		if (value instanceof JsonArray)
+		{
+			final JsonArray array = jsonObject.getArray(key, new JsonArray());
+			((JsonArray) value).forEach(v -> array.add(v));
+			jsonObject.putArray(key, array);
+		}
+		else
+		{
+			jsonObject.putValue(key, value);
+		}
+	}
+
+	private void processValues(final JsonObject ret, final JsonArray raml, final JsonArray proxy)
+	{
+		if (raml != null)
+		{
+			raml.toList().forEach(ramlValue -> {
+				if (ignored.contains(ramlValue))
+				{
 					return;
 				}
 
-				final JsonObject parameters = get(ret, key);
+				if (proxy == null || !proxy.contains(ramlValue))
+				{
+					ret.putString((String) ramlValue, "NOT_USED_IN_TEST");
+				}
 
-				report(parameters, (JsonObject) nestedRaml, (JsonObject) nestedProxy);
-			}
-		});
+				// TODO check value type
+			});
+		}
 	}
 
 	protected JsonObject get(final JsonObject parent, final String key)
