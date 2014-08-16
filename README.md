@@ -40,8 +40,8 @@ Example configuration with default values:
 ```json
 {
    "target.host" : "localhost",
-   "target.port" : "8080",
-   "proxy.port" : "8081",
+   "target.port" : 8080,
+   "proxy.port" : 8081,
    "raml.resource" : "http://localhost:8080/service.raml",
    "ignored.resources" : [ "request.header.Host", "response.header.Date", "request.header.Accept", "request.header.Connection", "response.header.Server", "request.header.Content-Length", "response.header.Content-Length"
    ]
