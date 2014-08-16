@@ -52,8 +52,7 @@ Sample Report
 -----------
 ```json
 {
-  "/{service}/resource": 
-    {
+  "/cars/{id}/resource": {
     "POST" : {
       "request.header.Count" : {
         "orderService" : "NOT_USED_IN_TEST"
@@ -64,7 +63,9 @@ Sample Report
       },
       "response.header.Content-Type" : "NOT_DEFINED_IN_RAML"
     }
-  }
+  },
+  "/cars" : "NOT_CALLED_IN_TESTS",
+  "/cars/123" : "NOT_DEFINED_IN_RAML"
 }
 ```
 
