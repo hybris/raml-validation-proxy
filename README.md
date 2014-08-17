@@ -13,6 +13,7 @@ Roadmap
 
 Following features are planned:
 
+* Easier configuration.
 * Integration with [Maven Failsafe][9].
 * Integration with [JUnit][10].
 * [Gradle][11] build.
