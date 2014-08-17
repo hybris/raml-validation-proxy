@@ -25,6 +25,7 @@ public class ProxyServer extends Verticle
 				config.getInteger("target.port", 8080));
 
 		RouteMatcher rm = new RouteMatcher();
+
 		rm.get("/raml-validation-proxy/restart", req -> {
 			vertx.eventBus().publish("restart", true);
 			req.response().end("restarted");

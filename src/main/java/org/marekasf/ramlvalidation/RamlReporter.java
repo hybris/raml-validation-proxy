@@ -66,7 +66,7 @@ public class RamlReporter extends Verticle
 			}
 			else if (proxy == null || !proxy.containsField(key))
 			{
-				ret.putString(key, "NOT_CALLED_IN_TESTS");
+				ret.putString(key, "NOT_USED_IN_TESTS");
 			}
 			else
 			{
