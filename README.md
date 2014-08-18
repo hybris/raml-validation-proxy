@@ -4,7 +4,7 @@ raml-validation-proxy
 A lot of RESTful services using [RESTful API Modeling Language][8] to define their APIs.
 This service utilizes RESTful services test harness to verify if implementation follows API contract.
 
-It creates http proxy to record requests and then generates json report.
+It creates http proxy to record requests and responses from oryginal service. After the tests json report can be generated. 
 
 It is built on [Vert.x][7] embedded server with Java 8 and [Maven](http://maven.apache.org/).
 
@@ -85,7 +85,7 @@ In case checked value verification failed following messages are added to report
   "/cars/{id}/resource": {
     "POST" : {
       "request.header.Count" : {
-        "orderService" : "NOT_USED_IN_TEST"
+        "many" : "NOT_USED_IN_TEST"
       },
       "request.header.Accept" : "NOT_USED_IN_TEST",
       "response.status" : {
