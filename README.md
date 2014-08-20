@@ -25,6 +25,7 @@ How to start
 #### Starting proxy server.
 
 ```sh
+mvn compile
 mvn exec:java
 ```
 
