@@ -18,6 +18,8 @@ Following features are planned:
 * Integration with [JUnit][10].
 * [Gradle][11] build.
 * Request and response body verification.
+* Missing examples in RAML.
+* RAML verification against wadl file.
 
 How to start
 -----------
