@@ -1,7 +1,6 @@
 package org.marekasf.ramlvalidation;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,19 +12,17 @@ import org.apache.commons.collections4.list.SetUniqueList;
 import org.raml.model.Raml;
 import org.raml.model.Resource;
 import org.raml.parser.visitor.RamlDocumentBuilder;
-import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 import org.vertx.java.platform.Verticle;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 public class RamlParser extends Verticle
 {
 	// uri : method : attr : set<value>
-	private Map<String, Map<String, Map<String, SetUniqueList<String>>>> collector = new HashMap<>();
+	private final Map<String, Map<String, Map<String, SetUniqueList<String>>>> collector = new HashMap<>();
 
 	private String ramlResource;
 
@@ -117,7 +114,7 @@ public class RamlParser extends Verticle
 		{
 			map.put(attr, SetUniqueList.setUniqueList(new LinkedList<>()));
 		}
-		Arrays.stream(val).filter(Objects::nonNull).forEach(v -> ((List) map.get(attr)).add(v));
+		Arrays.stream(val).filter(Objects::nonNull).forEach(v -> ((List) map.get(attr)).add(v.trim()));
 	}
 
 	private Map<String, ?> getMap(final Map<String, ?> map, final String key)
