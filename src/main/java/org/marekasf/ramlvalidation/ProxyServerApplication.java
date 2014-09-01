@@ -39,7 +39,7 @@ public class ProxyServerApplication extends Verticle
 
 			try
 			{
-				config = new JsonObject(Resources.toString(Resources.getResource("/ramlvalidation_config.json"), Charsets.UTF_8));
+				config = new JsonObject(Resources.toString(Resources.getResource("ramlvalidation_config.json"), Charsets.UTF_8));
 			}
 			catch (Exception e)
 			{
