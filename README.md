@@ -24,6 +24,15 @@ Following features are planned:
 How to start
 -----------
 
+#### Installing raml parser.
+
+Download [raml-java-parser](https://github.com/raml-org/raml-java-parser).
+
+Install in local repository:
+```sh
+mvn install
+```
+
 #### Starting proxy server.
 
 ```sh
