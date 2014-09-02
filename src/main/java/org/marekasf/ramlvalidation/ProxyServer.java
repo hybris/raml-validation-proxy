@@ -24,11 +24,16 @@ public class ProxyServer extends Verticle
 		final HttpClient client = vertx.createHttpClient().setHost(config.getString("target.host", "localhost")).setPort(
 				config.getInteger("target.port", 8080));
 
-		RouteMatcher rm = new RouteMatcher();
+		final RouteMatcher rm = new RouteMatcher();
 
 		rm.get("/raml-validation-proxy/restart", req -> {
 			vertx.eventBus().publish("restart", true);
 			req.response().end("restarted");
+		});
+
+		rm.get("/raml-validation-proxy/stop", req -> {
+			ProxyServerApplication.semaphore.release();
+			req.response().end("stop");
 		});
 
 		rm.get("/raml-validation-proxy/proxy_log.json", req -> vertx.eventBus().send("proxy_log", true,
